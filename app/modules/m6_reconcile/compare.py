@@ -6,4 +6,7 @@ def balance(state):
     return {'input':state['input_count'],'accepted':accepted,'isolated':isolated,
         'blank':state['blank_count'],'headers':state['header_count'],'duplicates':state['duplicate_count'],
         'accounted':accounted,'balanced':accounted==state['input_count'],
-        'business':state.get('business',{})}
+        'business':state.get('business',{}),
+        'business_official':state.get('business_official'),
+        'pending_adjudication_count':state.get('pending_adjudication_count',
+            len(state.get('adjudications',[]))-len(state.get('promotions',{})))}

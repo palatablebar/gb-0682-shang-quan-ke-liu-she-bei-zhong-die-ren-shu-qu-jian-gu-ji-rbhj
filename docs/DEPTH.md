@@ -31,6 +31,9 @@
 | TRAP-26 | 旧版本复核 | 覆盖新结论 | 事务条件更新 | `app/store.py` | `tests/test_archive.py::test_stale_review` |
 | TRAP-11 | 时区混用 | 同刻不同桶 | UTC归整 | `app/modules/m2_mapping/coerce.py` | `tests/test_versions.py::test_same_instant` |
 | TRAP-19 | 三方约束矛盾 | 输出伪精确数 | 非负原子区域可行检查 | `app/modules/m5_calculate/rules.py` | `tests/test_calculate.py::test_three_way_contradiction` |
+| TRAP-30 | 矛盾桶二选一撤约束 | 随手撤一条得到假精确区间 | 三条交集分别撤下取保守包络，原证据全保留 | `app/modules/m5_calculate/adjudication.py` | `tests/test_adjudication.py::test_envelope_is_conservative_not_false_precision` |
+| TRAP-31 | 未核对候选混入日汇 | 候选直接累加进正式汇总 | 重新核对指纹+版本乐观锁，失败409回退旧版 | `app/modules/m6_reconcile/verification.py`、`app/store.py` | `tests/test_adjudication.py::test_recheck_failure_blocks_promotion_and_keeps_old` |
+| TRAP-32 | 补正重试重复入账 | 每次确认新增裁决/递增版本 | (批次,桶)幂等UPSERT，重试不新增记录 | `app/store.py` | `tests/test_adjudication.py::test_retry_is_idempotent_and_creates_no_new_records` |
 
 ## 对账规则
 

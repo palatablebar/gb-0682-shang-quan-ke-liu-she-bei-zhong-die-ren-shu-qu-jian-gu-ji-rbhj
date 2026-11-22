@@ -30,6 +30,19 @@ def create_app():
         data=request.get_json(silent=True) or {}
         if not isinstance(data.get('version'),int):raise DomainError('VERSION','请提交复核版本')
         return jsonify(store.review(run_id,data['version'],data.get('decision')))
+    @app.post('/api/runs/<run_id>/adjudication/<bucket>/confirm')
+    def confirm_adjudication(run_id,bucket):
+        from app.modules.m6_reconcile.verification import recheck,build_promotion_record,rederive_from_source
+        data=request.get_json(silent=True) or {}
+        if not isinstance(data.get('version'),int):raise DomainError('VERSION','请提交复核版本')
+        state=store.get(run_id)
+        adj=store.adjudication(run_id,bucket)
+        # 从批次原始 CSV 重新执行管线，以原始证据重新推导，作为核对基准。
+        fresh=rederive_from_source(state)
+        ok,fingerprint,_=recheck(adj,fresh)
+        if not ok:raise DomainError('RECHECK_FAILED','重新核对未通过，候选修正不得进入正式日汇',409)
+        record=build_promotion_record(adj,fingerprint)
+        return jsonify(store.promote(run_id,bucket,data['version'],record))
     @app.get('/api/archive/<run_id>/export.csv')
     def download(run_id):
         state=store.get(run_id)

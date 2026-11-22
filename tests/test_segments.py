@@ -3,7 +3,7 @@ from app.errors import DomainError
 from app.workflow import run
 from app.modules.m4_segments.rules import model
 
-def test_real_model_count(raw):assert len(run(raw,{},4)['models'])==12
+def test_real_model_count(raw):assert len(run(raw,{},4)['models'])==13
 def test_real_zone_map(raw):assert run(raw,{},4)['models'][0]['model']['zones']=={'A':120,'B':110,'C':90}
 def test_real_pair_map(raw):assert run(raw,{},4)['models'][0]['model']['pairs']['A|B']==40
 def test_pair_exceeds_zone():

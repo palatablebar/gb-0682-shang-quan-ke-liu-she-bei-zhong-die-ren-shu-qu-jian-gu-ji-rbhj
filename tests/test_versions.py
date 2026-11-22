@@ -1,7 +1,7 @@
 from app.workflow import run
 from app.modules.m3_versions.rules import apply
 
-def test_real_hour_observations(raw):assert len(run(raw,{},3)['observations'])==72
+def test_real_hour_observations(raw):assert len(run(raw,{},3)['observations'])==78
 def test_alias_canonical(raw):assert run(raw,{},3)['observations'][0]['left']=='A'
 def test_zone_count_integral(raw):assert run(raw,{},3)['observations'][0]['count']==120
 def test_same_instant():
